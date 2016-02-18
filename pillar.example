@@ -1,0 +1,5 @@
+# vi: set ft=yaml:
+gitlab-omnibus:
+  version: 8.4.4
+  pkgs:
+    - gitlab-ce

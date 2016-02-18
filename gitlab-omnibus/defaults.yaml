@@ -1,0 +1,9 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+
+gitlab_omnibus:
+  version: 8.4.4
+  pkgs: [ 'gitlab-ce' ]
+  apt_repository_url: https://packages.gitlab.com/gitlab/gitlab-ce
+  apt_source_file: '/etc/apt/sources.list.d/gitlab-ci.list'
+

@@ -1,0 +1,8 @@
+{## Start with defaults from defaults.yaml ##}
+{% import_yaml "gitlab-omnibus/defaults.yaml" as default_settings %}
+{# Update settings defaults from pillar data #}
+{% set gitlab_omnibus = salt['pillar.get'](
+    'gitlab_omnibus',
+    default=default_settings.gitlab_omnibus,
+    merge=True)
+%}
