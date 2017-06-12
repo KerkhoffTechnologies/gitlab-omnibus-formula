@@ -2,8 +2,8 @@
 # vim: ft=yaml
 
 gitlab_omnibus:
-  version: 8.4.4
+  version: 9.2.5
   pkgs: [ 'gitlab-ce' ]
   apt_repository_url: https://packages.gitlab.com/gitlab/gitlab-ce
-  apt_source_file: '/etc/apt/sources.list.d/gitlab-ci.list'
+  apt_source_file: '/etc/apt/sources.list.d/gitlab-ce.list'
 
