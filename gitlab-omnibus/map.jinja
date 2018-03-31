@@ -1,6 +1,43 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{%- macro deep_merge(a, b) %}
+{#-     This whole `'dict' in x.__class__.__name__` mess is a
+        workaround for the missing mapping test in CentOS 6's
+        ancient Jinja2, see #193  #}
+{%-     for k,v in b.items() %}
+{%-         if v is string or v is number %}
+{%-             do a.update({ k: v }) %}
+{%-         elif 'dict' not in v.__class__.__name__ %}
+{%-             if a[k] is not defined %}
+{%-                 do a.update({ k: v }) %}
+{%-             elif a[k] is iterable and 'dict' not in a[k].__class__.__name__ and
+                a[k] is not string %}
+{%-                 do a.update({ k: v|list + a[k]|list}) %}
+{%-             else %}
+{%-                 do a.update({ k: v }) %}
+{%-             endif %}
+{%-         elif 'dict' in v.__class__.__name__ %}
+{%-             if a[k] is not defined %}
+{%-                 do a.update({ k: v }) %}
+{%-             elif 'dict' in a[k].__class__.__name__ %}
+{%-                 do a.update({ k: v }) %}
+{%-             else %}
+{%-                 do deep_merge(a[k], v) %}
+{%-             endif %}
+{%-         else %}
+{%-            do a.update({ k: 'ERROR: case not contempled in merging!' }) %}
+{%-         endif %}
+{%-     endfor %}
+{%- endmacro %}
+
 {## Start with defaults from defaults.yaml ##}
 {% import_yaml "gitlab-omnibus/defaults.yaml" as default_settings %}
-{# Update settings defaults from pillar data #}
+{## Bring in the grain values ##}
+{% set grains_omnibus = salt['grains.get']('gitlab_omnibus') %}
+{% do deep_merge(default_settings.gitlab_omnibus, grains_omnibus) %}
+
+{## Bring in the Pillar values - These will overwrite grains ##}
 {% set gitlab_omnibus = salt['pillar.get'](
     'gitlab_omnibus',
     default=default_settings.gitlab_omnibus,

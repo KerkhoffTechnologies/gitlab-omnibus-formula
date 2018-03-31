@@ -2,8 +2,11 @@
 # vim: ft=yaml
 
 gitlab_omnibus:
-  version: 9.2.5
-  pkgs: [ 'gitlab-ce' ]
+  version: 10.6.0-ce.0
+  pkgs: ['gitlab-ce']
   apt_repository_url: https://packages.gitlab.com/gitlab/gitlab-ce
-  apt_source_file: '/etc/apt/sources.list.d/gitlab-ce.list'
-
+  apt_source_file: '/etc/apt/sources.list.d/gitlab_gitlab-ce.list'
+  config_file: '/etc/gitlab/managed_config_gitlab.rb'
+  config_file_source: 'salt://gitlab-omnibus/templates/managed_config_gitlab.jinja'
+  service: 'gitlab-runsvdir.service'
+  enable: true

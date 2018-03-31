@@ -3,9 +3,6 @@
 {# If sysctl kernel.shmmax is read only                 #}
 {# Then we are in container and gitlab config will fail #}
 
-include:
-  - gitlab-omnibus.repository
-  - gitlab-omnibus.install
-  - gitlab-omnibus.configure
-  - gitlab-omnibus.service
-
+test-sysctl:
+  cmd.run:
+    - name: "cat /proc/sys/kernel/shmall > /proc/sys/kernel/shmall"
